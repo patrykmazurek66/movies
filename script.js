@@ -84,6 +84,39 @@ let newMovieDiv = ()=> {
 });
 }
 
+
+
+
+
+
+
+//at refresh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    input.value = "";
+    category = categories.options[categories.selectedIndex].value;
+    newMovieDiv();
+
+
+
+
+//event listeners
+
+
+categories.addEventListener("change",()=>{
+    section.innerHTML = "";
+    category = categories.options[categories.selectedIndex].value;
+    page = 1;
+    newMovieDiv();
+})
+
+document.addEventListener("scroll",()=>{
+    if(window.innerHeight + window.scrollY >= document.body.scrollHeight + scrollDelta){
+        if(page < totalPages || (page === 1 && totalPages > 1)){
+            page++;
+            newMovieDiv();
+        } 
+    } 
+})
+     
 input.addEventListener("keyup",()=>{
     if(input.value.length > 2){
 
@@ -140,35 +173,3 @@ input.addEventListener("keyup",()=>{
         scrollDelta = -100;
     }
 });
-
-
-
-
-
-//at refresh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    input.value = "";
-    category = categories.options[categories.selectedIndex].value;
-    newMovieDiv();
-
-
-
-
-//event listeners
-
-
-categories.addEventListener("change",()=>{
-    section.innerHTML = "";
-    category = categories.options[categories.selectedIndex].value;
-    page = 1;
-    newMovieDiv();
-})
-
-document.addEventListener("scroll",()=>{
-    if(window.innerHeight + window.scrollY >= document.body.scrollHeight + scrollDelta){
-        if(page < totalPages || (page === 1 && totalPages > 1)){
-            page++;
-            newMovieDiv();
-        } 
-    } 
-})
-     
