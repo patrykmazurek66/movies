@@ -4,6 +4,7 @@ const section = document.querySelector("section");
 
 
 let page = 1;
+let category = "popular";
 
 fetch("https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey).then(response =>{
     return response.json();
@@ -19,7 +20,7 @@ fetch("https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey).then(respo
 })
 
 
-let newMovieDiv = (page)=> {
+let newMovieDiv = ()=> {
  
 
     fetch("https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey + "&page=" + page).then(response =>{
@@ -75,12 +76,12 @@ let newMovieDiv = (page)=> {
 });
 
 }
-    newMovieDiv(page);
+    newMovieDiv();
 
 document.addEventListener("scroll",()=>{
     if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 100){
         page++;
-        newMovieDiv(page);
+        newMovieDiv();
     } 
 })
      
