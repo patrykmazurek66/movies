@@ -1,6 +1,7 @@
 const apiKey = "1dfeeec59f94755d408a99b9bcc7e18a";
 
 const section = document.querySelector("section");
+const categories = document.querySelector("#categories");
 
 
 let page = 1;
@@ -23,7 +24,7 @@ fetch("https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey).then(respo
 let newMovieDiv = ()=> {
  
 
-    fetch("https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey + "&page=" + page).then(response =>{
+    fetch("https://api.themoviedb.org/3/movie/"+category+"?api_key=" + apiKey + "&page=" + page).then(response =>{
     return response.json();
     }).then(data =>{
 
@@ -76,7 +77,18 @@ let newMovieDiv = ()=> {
 });
 
 }
+    category = categories.options[categories.selectedIndex].value;
+    // console.log(category);
     newMovieDiv();
+
+
+
+categories.addEventListener("change",()=>{
+    section.innerHTML = "";
+    category = categories.options[categories.selectedIndex].value;
+    page = 1;
+    newMovieDiv();
+})
 
 document.addEventListener("scroll",()=>{
     if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 100){
