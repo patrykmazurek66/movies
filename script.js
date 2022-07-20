@@ -58,7 +58,7 @@ let newMovieDiv = ()=> {
 
             newElementDescirption.innerText = text;
            
-            newElementPoster.src = "https://image.tmdb.org/t/p/w200" + element.poster_path;
+            newElementPoster.src = addPoster(element);
             newElementPoster.alt = element.title + " poster";
 
             newElementDescriptionContainer.classList.add("desc-container")
@@ -84,8 +84,9 @@ let newMovieDiv = ()=> {
 });
 }
 
-
-
+let addPoster = (element)=>{
+    return element.poster_path === null ? "no-image.png":"https://image.tmdb.org/t/p/w200" + element.poster_path;
+}
 
 
 
@@ -121,21 +122,23 @@ input.addEventListener("keyup",()=>{
     if(input.value.length > 2){
 
         searchResults.classList.add("show");
-        section.style.top = "-450px";
 
-        scrollDelta = -550;
 
 
         let searchText = input.value;
 
-        console.log(searchText);
-
         fetch("https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&query=" + encodeURI(searchText) + "&page=" + 1).then(response =>{
             return response.json();
         }).then(data =>{
-
             searchResults.innerHTML = "";
-            for(let i = 0;i<3;i++){
+            let totalResults = data.total_results;
+            totalResults = totalResults < 3? totalResults : 3 ;
+
+            section.style.top = totalResults * -150 + "px"; //to maitain section position
+
+            scrollDelta = -100 -totalResults * 150;
+
+            for(let i = 0;i<  totalResults  ;i++){
                 var element = data.results[i];
     
                 //creating elements of movie container and movie container
@@ -149,8 +152,10 @@ input.addEventListener("keyup",()=>{
 
 
                 newElementTitle.innerText = element.title;
-            
-                newElementPoster.src = "https://image.tmdb.org/t/p/w200" + element.poster_path;
+                
+                              
+                newElementPoster.src = addPoster(element);
+
                 newElementPoster.alt = element.title + " poster";
 
                 
@@ -169,7 +174,17 @@ input.addEventListener("keyup",()=>{
     }else{
         searchResults.classList.remove("show");
         section.style.top = "0px";
-
         scrollDelta = -100;
     }
 });
+
+section.addEventListener("click",()=>{
+    searchResults.classList.remove("show");
+    section.style.top = "0px";
+    scrollDelta = -100;
+})
+
+document.querySelector("nav p").addEventListener("click",()=>{
+    window.location.reload();
+    document.documentElement.scrollTop = 0;
+})

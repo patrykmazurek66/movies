@@ -34,14 +34,18 @@ nav span{
     font-weight: 700;
 }
 nav p{
+    
+    height: 100%;
+    background-color: var(--secondary-color);
     font-size: 30px;
-   position:absolute;
-   left:20px;
+    position:absolute;
+    top:0;
+    left:20px;
 }
 nav input{
     width: 700px;
     height: 40px;
-    border-radius: 20px;
+    border-radius: 5px;
     border: 2px var(--main-color) solid;
     margin: 0 150px 0 175px;
     padding: 0 5px 0 5px;
@@ -60,7 +64,7 @@ nav select{
     font-weight: 700;
 }
 
-nav select:hover, .searchResult:hover{
+nav select:hover, .searchResult:hover,nav p:hover{
     filter: brightness(1.2);
     cursor: pointer;
 }
@@ -95,6 +99,7 @@ nav select:hover, .searchResult:hover{
 
 .searchResult img{
     height: 100%;
+    max-width: 106px;
     margin-right: 50px;
 }
 
@@ -107,6 +112,10 @@ section{
     align-content: center;
     justify-content: center;
     flex-wrap: wrap;
+}
+section img{
+    width: 200px;
+    height: 300px;
 }
 .movie{
     position: relative;
