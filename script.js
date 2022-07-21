@@ -4,6 +4,8 @@ const section = document.querySelector("section");
 const categories = document.querySelector("#categories");
 const input = document.querySelector("input");
 const searchResults = document.querySelector(".searchResults")
+const moreInfoModal = document.querySelector(".moreInfo");
+const block = document.querySelector(".block");
 
 
 let page = 1;
@@ -23,6 +25,45 @@ let scrollDelta = -100;
 // }).catch(err=>{
 //     console.log("Error:",err);
 // })
+
+
+
+
+let showMoreInfo = (movieId)=>{
+    moreInfoModal.classList.add("show");
+    block.classList.add("show");
+    document.body.classList.add("stop-scrolling");
+
+    moreInfoModal.querySelector("button").addEventListener("click",()=>{
+        moreInfoModal.classList.remove("show");
+        block.classList.remove("show");
+        document.body.classList.remove("stop-scrolling");
+
+    })
+
+
+
+    fetch("https://api.themoviedb.org/3/movie/" + movieId + "?api_key=" + apiKey).then(response =>{
+        return response.json();
+    }).then(data =>{
+       
+        console.log(data);
+
+        moreInfoModal.querySelector(".backdrop").src = addBackdrop(data);
+        moreInfoModal.querySelector(".title").innerText = data.title;
+        moreInfoModal.querySelector(".tagline").innerText = data.tagline;
+        moreInfoModal.querySelector(".description").innerText = data.overview;
+        moreInfoModal.querySelector(".votes").innerText = "Rating: " + data.vote_average + " of " + data.vote_count + " votes";
+        moreInfoModal.querySelector(".release-date").innerText ="Release date: " +  data.release_date;
+     
+    }).catch(err=>{
+        console.log("Error:",err);
+    })
+
+
+
+}
+
 
 
 let newMovieDiv = ()=> {
@@ -52,6 +93,9 @@ let newMovieDiv = ()=> {
 
 
             newElementTitle.innerText = element.title;
+            newElementTitle.classList.add("movie-title");
+            newElementTitle.setAttribute("movie-id", element.id);
+
 
             let text = element.overview;
             text.length > 280 ? text = text.slice(0,280) + "..." : text;
@@ -61,7 +105,7 @@ let newMovieDiv = ()=> {
             newElementPoster.src = addPoster(element);
             newElementPoster.alt = element.title + " poster";
 
-            newElementDescriptionContainer.classList.add("desc-container")
+            newElementDescriptionContainer.classList.add("desc-container");
 
 
             //Append childs to div and whole element to section
@@ -78,6 +122,12 @@ let newMovieDiv = ()=> {
         });
 
 
+        document.querySelectorAll(".movie-title").forEach((element)=>{      //click on title shows modal with more info
+            element.addEventListener("click",(e)=>{
+                showMoreInfo(e.target.getAttribute("movie-id"));
+            });
+        })
+
 
     }).catch(err=>{
     console.log("Error:",err);
@@ -86,6 +136,9 @@ let newMovieDiv = ()=> {
 
 let addPoster = (element)=>{
     return element.poster_path === null ? "no-image.png":"https://image.tmdb.org/t/p/w200" + element.poster_path;
+}
+let addBackdrop = (element)=>{
+    return element.backdrop_path === null ? "no-image.png":"https://image.tmdb.org/t/p/original" + element.backdrop_path;
 }
 
 
@@ -167,6 +220,7 @@ input.addEventListener("keyup",()=>{
                 searchResults.appendChild(newElement);
 
             }
+         
         }).catch(err=>{
             console.log("Error:",err);
         })
@@ -188,3 +242,4 @@ document.querySelector("nav p").addEventListener("click",()=>{
     window.location.reload();
     document.documentElement.scrollTop = 0;
 })
+
